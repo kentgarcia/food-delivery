@@ -1,0 +1,97 @@
+<!-- src/main/resources/templates/checkout.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Checkout - Online Food Delivery System</title>
+    <link rel="shortcut icon" href="assets/images/favicon.png" type="image/png">
+    <link rel="stylesheet" href="assets/fonts/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/default.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<header class="header-area page-header">
+    <div class="container">
+        <div class="header-navigation">
+            <div class="nav-overlay"></div>
+            <div class="primary-menu">
+                <div class="site-branding">
+                    <a href="index.html" class="brand-logo"><img src="assets/images/logo/logo-main.png" alt="Logo" style="width: 100px; height: 100px;"></a>
+                </div>
+                <div class="nav-inner-menu">
+                    <nav class="main-menu">
+                        <ul>
+                            <li class="menu-item"><a href="index.html">Home</a></li>
+                            <li class="menu-item"><a href="menu.html">Menu</a></li>
+                            <li class="menu-item"><a href="cart.html">Cart</a></li>
+                            <li class="menu-item"><a href="checkout.html">Checkout</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<section class="checkout-section pt-110 pb-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title text-center mb-55">
+                    <h2>Checkout</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <form id="checkoutForm">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <input type="text" class="form-control" id="address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="text" class="form-control" id="phone" required>
+                    </div>
+                    <button type="submit" class="theme-btn style-one">Place Order</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="assets/vendor/jquery-3.6.0.min.js"></script>
+<script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#checkoutForm').submit(function(event) {
+            event.preventDefault();
+            const customerName = $('#name').val();
+            const address = $('#address').val();
+            const phone = $('#phone').val();
+            $.ajax({
+                url: '/cart/checkout',
+                type: 'POST',
+                data: {
+                    customerName: customerName,
+                    address: address,
+                    phone: phone
+                },
+                success: function(response) {
+                    alert('Order placed successfully!');
+                    window.location.href = '/order';
+                },
+                error: function(xhr) {
+                    alert('Failed to place order.');
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

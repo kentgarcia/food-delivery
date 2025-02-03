@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery - History</title>
+    <link rel="shortcut icon" href="../assets/images/favicon.png" type="image/png">
+    <link rel="stylesheet" href="../assets/fonts/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/vendor/slick/slick.css">
+    <link rel="stylesheet" href="../assets/vendor/nice-select/css/nice-select.css">
+    <link rel="stylesheet" href="../assets/vendor/magnific-popup/dist/magnific-popup.css">
+    <link rel="stylesheet" href="../assets/vendor/jquery-ui/jquery-ui.min.css">
+    <link rel="stylesheet" href="../assets/vendor/animate.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/fonts/fontawesome/css/all.min.css">
+    <style>
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #fff;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+
+        .nav-button {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .nav-button.active {
+            color: #ff007f;
+        }
+
+        .nav-button-icon {
+            display: block;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .nav-button-text {
+            display: block;
+            font-size: 12px;
+        }
+
+        @media (max-width: 200px) {
+            .bottom-nav {
+                flex-direction: column;
+            }
+
+            .nav-button {
+                padding: 15px 0;
+            }
+        }
+
+        .orders-section {
+            .order-card {
+                border: 2px solid #FF007F;
+                background-color: white;
+                border-radius: 15px;
+                padding: 20px;
+                margin-bottom: 20px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .order-card p {
+                margin: 5px 0;
+            }
+
+            .order-card .btn-primary {
+                background-color: #FF007F;
+                border-color: #FF007F;
+                color: white;
+                text-decoration: none;
+                padding: 10px 20px;
+                border-radius: 50px; /* Make the button rounded */
+            }
+
+            .order-card .btn-primary:hover {
+                background-color: #e6006f;
+                border-color: #e6006f;
+            }
+
+            /* Modal Styles */
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0, 0, 0, 0.5);
+            }
+
+            .modal-content {
+                background-color: #fefefe;
+                margin: 15% auto;
+                padding: 20px;
+                border: 1px solid #888;
+                width: 80%;
+                max-width: 500px;
+                border-radius: 8px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+            }
+
+            .close:hover,
+            .close:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+    </style>
+</head>
+<body>
+<header class="header-area">
+    <div class="container">
+        <div class="header-navigation">
+            <div class="nav-overlay"></div>
+            <div class="primary-menu">
+                <div class="site-branding">
+                    <a href="/home" class="brand-logo"><img src="../assets/images/logo/logo-main.png" alt="Logo" style="width: 100px; height: 100px;"></a>
+                </div>
+                <div class="nav-inner-menu">
+                    <div class="foodix-nav-menu">
+                        <div class="mobile-logo mb-30 d-block d-xl-none text-center">
+                            <a href="/home" class="brand-logo"><img src="../assets/images/logo/logo-main.png" alt="Site Logo" style="width: 100px; height: 100px;"></a>
+                        </div>
+                    </div>
+                    <div class="nav-right-item">
+                        <div class="cart-button">
+                            <a href="/restaurant/login" class="far fa-user"></a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+    <main>
+        <section class="orders-section pb-100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="section-title text-center mb-55">
+                            <h2>Current Deliveries</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div id="history">
+                            <!-- Orders will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer>
+            <nav class="bottom-nav">
+                <button class="nav-button" onclick="window.location.href='/delivery/dashboard'">
+                    <i class="fa fa-bicycle nav-button-icon"></i> <span class="nav-button-text">Delivery</span>
+                </button>
+                <button class="nav-button active">
+                    <i class="fa fa-history nav-button-icon"></i> <span class="nav-button-text">History</span>
+                </button>
+                <button class="nav-button" onclick="window.location.href='/delivery/account'" id="contact-info-btn">
+                    <i class="fas fa-address-book nav-button-icon"></i> <span class="nav-button-text">Account</span>
+                </button>
+            </nav>
+        </footer>
+    </main>
+
+    <!-- Order Details Modal -->
+    <div id="order-details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Order Details</h2>
+            <p><strong>Order ID:</strong> <span id="modal-order-id"></span></p>
+            <p><strong>Address:</strong> <span id="modal-order-address"></span></p>
+            <p><strong>Details:</strong> <span id="modal-order-details"></span></p>
+        </div>
+    </div>
+
+<script src="../assets/vendor/jquery-3.6.0.min.js"></script>
+<script src="../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="../assets/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="../assets/vendor/datatables/dataTables.bootstrap5.min.js"></script>
+<script>
+    $(document).ready(function() {
+        function loadOrders() {
+            $.ajax({
+                url: '/orders',
+                type: 'GET',
+                success: function(response) {
+                    let orderHtml = '';
+                    response.forEach(function(order) {
+                        if (order.status === 'Delivered') {
+                            orderHtml += `
+                            <div class="order-card">
+                                <p><strong>Order ID:</strong> ${order.id}</p>
+                                <p><strong>Customer Name:</strong> ${order.customerName}</p>
+                                <p><strong>Address:</strong> ${order.address}</p>
+                                <p><strong>Status:</strong> ${order.status}</p>
+                                <a data-id="${order.id}" class="btn btn-primary view-details-btn">View Details</a>
+                            </div>`;
+                        }
+                    });
+                    $('#history').html(orderHtml);
+                },
+                error: function(xhr) {
+                    alert('Failed to load orders.');
+                }
+            });
+        }
+
+        loadOrders();
+        setInterval(loadOrders, 10000);
+
+        $(document).on('click', '.view-details-btn', function() {
+            const orderId = $(this).data('id');
+            $.ajax({
+                url: `/orders/${orderId}`,
+                type: 'GET',
+                success: function(order) {
+                    $('#modal-order-id').text(`orderno-${String(order.id).padStart(5, '0')}`);
+                    $('#modal-order-address').text(order.address);
+
+                    let orderCartItemsHtml = '<h3>Order Cart Items</h3><ul>';
+                    order.orderCartItems.forEach(function(item) {
+                        orderCartItemsHtml += `<li>${item.menuItem.name} - $${item.menuItem.price.toFixed(2)} x ${item.quantity}</li>`;
+                    });
+                    orderCartItemsHtml += '</ul>';
+                    $('#modal-order-details').html(orderCartItemsHtml);
+
+                    $('#accept-order-btn').attr('data-id', order.id);
+                    $('#order-details-modal').show();
+                },
+                error: function(xhr) {
+                    alert('Failed to load order details.');
+                }
+            });
+        });
+
+        $('.close').on('click', function() {
+            $(this).closest('.modal').hide();
+        });
+
+        $(window).on('click', function(event) {
+            if ($(event.target).hasClass('modal')) {
+                $(event.target).hide();
+            }
+        });
+    });
+</script>
+</body>
+</html>

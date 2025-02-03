@@ -1,0 +1,80 @@
+/*!
+*    ______ _       _   _
+*    |  ____| |     | | (_)
+*    | |__  | | __ _| |_ _  ___ ___  _ __
+*    |  __| | |/ _` | __| |/ __/ _ \| '_ \
+*    | |    | | (_| | |_| | (_| (_) | | | |
+*    |_|    |_|\__,_|\__|_|\___\___/|_| |_|
+*
+*         https://www.flaticon.com
+*/
+
+@font-face {
+    font-family: "flaticon_foodix";
+    src: url("flaticon_foodix99a2.woff2?b5ca6ade3dd2305f9e48bb133e2dd2f5") format("woff2"),
+url("flaticon_foodix99a2.woff?b5ca6ade3dd2305f9e48bb133e2dd2f5") format("woff"),
+url("flaticon_foodix99a2.eot?b5ca6ade3dd2305f9e48bb133e2dd2f5#iefix") format("embedded-opentype"),
+url("flaticon_foodix99a2.ttf?b5ca6ade3dd2305f9e48bb133e2dd2f5") format("truetype"),
+url("flaticon_foodix99a2.svg?b5ca6ade3dd2305f9e48bb133e2dd2f5#flaticon_foodix") format("svg")
+}
+
+i[class^="flaticon-"]:before, i[class*=" flaticon-"]:before {
+    font-family: flaticon_foodix !important;
+    font-style: normal;
+    font-weight: normal !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.flaticon-food-tray:before {
+    content: "\f101";
+}
+.flaticon-burger:before {
+    content: "\f102";
+}
+.flaticon-healthy-food:before {
+    content: "\f103";
+}
+.flaticon-date:before {
+    content: "\f104";
+}
+.flaticon-sandwich:before {
+    content: "\f105";
+}
+.flaticon-sandwich-1:before {
+    content: "\f106";
+}
+.flaticon-shrimp:before {
+    content: "\f107";
+}
+.flaticon-pasta:before {
+    content: "\f108";
+}
+.flaticon-clean-water:before {
+    content: "\f109";
+}
+.flaticon-party:before {
+    content: "\f10a";
+}
+.flaticon-chef:before {
+    content: "\f10b";
+}
+.flaticon-play:before {
+    content: "\f10c";
+}
+.flaticon-free-shipping:before {
+    content: "\f10d";
+}
+.flaticon-return-on-investment:before {
+    content: "\f10e";
+}
+.flaticon-credit-card:before {
+    content: "\f10f";
+}
+.flaticon-24-hours:before {
+    content: "\f110";
+}
+

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard - Online Food Delivery System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: #77aaff 3px solid;
+        }
+        header a {
+            color: #fff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 16px;
+        }
+        header ul {
+            padding: 0;
+            list-style: none;
+        }
+        header li {
+            float: left;
+            display: inline;
+            padding: 0 20px 0 20px;
+        }
+        header #branding {
+            float: left;
+        }
+        header #branding h1 {
+            margin: 0;
+        }
+        header nav {
+            float: right;
+            margin-top: 10px;
+        }
+        .content {
+            padding: 20px;
+            background: #fff;
+            margin-top: 20px;
+        }
+        .content h2 {
+            color: #333;
+        }
+        .content p {
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h1>Customer Dashboard</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" onclick="showSection('restaurants')">Browse Restaurants</a></li>
+                    <li><a href="#" onclick="showSection('order')">Place Order</a></li>
+                    <li><a href="#" onclick="showSection('status')">Order Status</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="container">
+        <div id="restaurants" class="content">
+            <h2>Browse Restaurants</h2>
+            <div id="restaurant-list"></div>
+        </div>
+        <div id="order" class="content" style="display:none;">
+            <h2>Place Order</h2>
+            <div class="form-group">
+                <label for="order-customer-id">Customer ID</label>
+                <input type="text" id="order-customer-id">
+            </div>
+            <div class="form-group">
+                <label for="order-restaurant-id">Restaurant ID</label>
+                <input type="text" id="order-restaurant-id">
+            </div>
+            <div class="form-group">
+                <button onclick="placeOrder()">Place Order</button>
+            </div>
+        </div>
+        <div id="status" class="content" style="display:none;">
+            <h2>Order Status</h2>
+            <div class="form-group">
+                <label for="status-order-id">Order ID</label>
+                <input type="text" id="status-order-id">
+            </div>
+            <div class="form-group">
+                <button onclick="subscribeOrderStatus()">Subscribe to Order Status</button>
+            </div>
+            <div id="order-status"></div>
+        </div>
+    </div>
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.content').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        async function browseRestaurants() {
+            const response = await fetch('/restaurants/all');
+            const data = await response.json();
+            const restaurantList = document.getElementById('restaurant-list');
+            restaurantList.innerHTML = '';
+            data.forEach(restaurant => {
+                const div = document.createElement('div');
+                div.innerHTML = `<h3>${restaurant.name}</h3><p>${restaurant.address}</p>`;
+                restaurantList.appendChild(div);
+            });
+        }
+
+        async function placeOrder() {
+            const customerId = document.getElementById('order-customer-id').value;
+            const restaurantId = document.getElementById('order-restaurant-id').value;
+
+            const response = await fetch('/orders/place', {
+                method: 'POST',
+                body: new URLSearchParams({ customerId, restaurantId })
+            });
+            const data = await response.json();
+            console.log(data);
+        }
+
+        async function subscribeOrderStatus() {
+            const orderId = document.getElementById('status-order-id').value;
+            const eventSource = new EventSource(`/orders/subscribe/${orderId}`);
+            eventSource.onmessage = function(event) {
+                const orderStatus = document.getElementById('order-status');
+                orderStatus.innerHTML = `<p>${event.data}</p>`;
+            };
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            browseRestaurants();
+        });
+    </script>
+</body>
+</html>

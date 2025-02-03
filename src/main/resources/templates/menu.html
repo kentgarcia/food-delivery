@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>NomNom Wheels - Menu</title>
+    <link rel="shortcut icon" href="assets/images/favicon.png" type="image/png">
+    <link rel="stylesheet" href="assets/fonts/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/nice-select/css/nice-select.css">
+    <link rel="stylesheet" href="assets/vendor/jquery-ui/jquery-ui.min.css">
+    <link rel="stylesheet" href="assets/css/default.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+        <div class="sidemenu-wrapper-cart">
+            <div class="sidemenu-content">
+                <div class="widget widget-shopping-cart">
+                    <h4>My cart</h4>
+                    <div class="sidemenu-cart-close"><i class="far fa-times"></i></div>
+                    <div class="widget-shopping-cart-content">
+                        <ul class="foodix-mini-cart-list">
+                        </ul>
+                        <div class="cart-mini-total">
+                            <div class="cart-total">
+                                <span><strong>Subtotal:</strong></span> <span class="amount">0 × <span><span class="currency">$</span>0.00</span></span>
+                            </div>
+                        </div>
+                        <div class="cart-button">
+                            <a href="/checkout" class="theme-btn style-one" id="checkoutButton">Proceed to checkout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="offcanvas__overlay"></div>
+        <header class="header-area page-header">
+            <div class="container">
+                <div class="header-navigation">
+                    <div class="nav-overlay"></div>
+                    <div class="primary-menu">
+                        <!--=== Site Branding ===-->
+                        <div class="site-branding">
+                            <a href="/home" class="brand-logo"><img src="assets/images/logo/logo-main.png" alt="Logo" style="width: 100px; height: 100px;"></a>
+                        </div>
+                        <div class="nav-inner-menu">
+                            <!--=== Foodix Nav Menu ===-->
+                            <div class="foodix-nav-menu">
+                                <!--=== Mobile Logo ===-->
+                                <div class="mobile-logo mb-30 d-block d-xl-none text-center">
+                                    <a href="/home" class="brand-logo"><img src="assets/images/logo/logo-main.png" alt="Site Logo" style="width: 100px; height: 100px;"></a>
+                                </div>
+                                <!--=== Main Menu ===-->
+                                <nav class="main-menu">
+                                    <ul>
+                                        <li class="menu-item"><a href="/home">Home</a>
+                                        </li>
+                                        <li class="menu-item"><a href="/shop">Shop</a>
+                                        </li>
+                                        <li class="menu-item"><a href="/order">Orders</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            <!--=== Nav Right Item ===-->
+                            <div class="nav-right-item">
+                                <div class="cart-button">
+                                    <i class="far fa-shopping-cart"></i>
+                                </div>
+                                <div class="navbar-toggler">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <section class="menu-section pb-100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="section-title text-center mb-55 wow fadeInDown">
+                            <h2>Menu</h2>
+                            <p id="restaurantName">RESERVED</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="cat1">
+                                <div class="row">
+                                    <div id="menuItems">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <a href="#" class="back-to-top" ><i class="far fa-angle-up"></i></a>
+
+        <script src="assets/vendor/jquery-3.6.0.min.js"></script>
+        <script src="assets/vendor/popper/popper.min.js"></script>
+        <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script src="assets/vendor/slick/slick.min.js"></script>
+        <script src="assets/vendor/magnific-popup/dist/jquery.magnific-popup.min.js"></script>
+        <script src="assets/vendor/nice-select/js/jquery.nice-select.min.js"></script>
+        <script src="assets/vendor/parallax.min.js"></script>
+        <script src="assets/vendor/jquery-ui/jquery-ui.min.js"></script>
+        <script src="assets/vendor/wow.min.js"></script>
+        <script src="assets/js/theme.js"></script>
+
+        <script>
+            function addToCart(menuItemId) {
+                $.ajax({
+                    url: '/cart/add',
+                    type: 'POST',
+                    data: {
+                        menuItemId: menuItemId,
+                        quantity: 1 // or any other quantity
+                    },
+                    success: function(response) {
+                        alert('Item added to cart successfully!');
+                        loadCart();
+                    },
+                    error: function(xhr) {
+                        alert('Failed to add item to cart.');
+                    }
+                });
+            }
+
+            function removeFromCart(cartItemId) {
+                $.ajax({
+                    url: '/cart/remove',
+                    type: 'DELETE',
+                    data: {
+                        cartItemId: cartItemId
+                    },
+                    success: function(response) {
+                        alert('Item removed from cart successfully!');
+                        loadCart();
+                    },
+                    error: function(xhr) {
+                        alert('Failed to remove item from cart.');
+                    }
+                });
+            }
+
+            function loadCart() {
+                $.ajax({
+                    url: '/cart/items',
+                    type: 'GET',
+                    success: function(response) {
+                        let cartHtml = '';
+                        let subtotalQuantity = 0;
+                        let subtotalPrice = 0;
+                        response.forEach(function(item) {
+                            const itemTotalPrice = item.quantity * item.menuItem.price;
+                            subtotalQuantity += item.quantity;
+                            subtotalPrice += itemTotalPrice;
+                            cartHtml += `
+                    <li class="foodix-menu-cart">
+                        <a href="#" class="remove-cart" data-cart-id="${item.id}"><i class="far fa-trash-alt"></i></a>
+                        <a href="#">
+                            <img src="${item.menuItem.imageUrl}" alt="cart image">
+                            ${item.menuItem.name}
+                        </a>
+                        <span class="quantity">${item.quantity} × <span class="total-price"><span class="currency">$</span>${itemTotalPrice.toFixed(2)}</span>
+                    </li>`;
+                        });
+                        $('.foodix-mini-cart-list').html(cartHtml);
+                        $('.cart-total .amount').html(`${subtotalQuantity} × <span><span class="currency">$</span>${subtotalPrice.toFixed(2)}</span>`);
+
+                        $('.remove-cart').click(function() {
+                            const cartItemId = $(this).data('cart-id');
+                            removeFromCart(cartItemId);
+                        });
+                    },
+                    error: function(xhr) {
+                        alert('Failed to load cart items.');
+                    }
+                });
+            }
+
+            $(document).ready(function() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const restaurantId = urlParams.get('restaurantId');
+
+                $('.add-to-cart').click(function() {
+                    const menuItemId = $(this).data('item-id');
+                    addToCart(menuItemId);
+                });
+
+
+                if (restaurantId) {
+                    $.ajax({
+                        url: `/restaurant/${restaurantId}/name`,
+                        type: 'GET',
+                        success: function(response) {
+                            if (response) {
+                                $('#restaurantName').text(response);
+                            } else {
+                                $('#restaurantName').text('Failed to load restaurant name.');
+                            }
+                        },
+                        error: function(xhr) {
+                            $('#restaurantName').text('Failed to load restaurant name.');
+                        }
+                    });
+
+                    $.ajax({
+                        url: `/restaurant/${restaurantId}/menu`,
+                        type: 'GET',
+                        success: function(response) {
+                            let menuHtml = '';
+                            response.forEach(function(item) {
+                                menuHtml += `
+                        <div class="col-xl-6">
+                            <div class="menu-item style-three mb-30">
+                                <div class="menu-thumbnail">
+                                    <img src="${item.imageUrl}" alt="Menu Thumbnail">
+                                </div>
+                                <div class="menu-info">
+                                    <h4 class="title"><a>${item.name}</a></h4>
+                                    <p>${item.description}</p>
+                                    <p class="price"><span class="currency">$</span>${item.price}</p>
+                                </div>
+                                <button class="theme-btn style-one add-to-cart" data-item-id="${item.id}">Add To Cart</button>
+                            </div>
+                        </div>`;
+                            });
+                            $('#menuItems').html(menuHtml);
+
+                            $('.add-to-cart').click(function() {
+                                const itemId = $(this).data('item-id');
+                                addToCart(itemId);
+                            });
+                        },
+                        error: function(xhr) {
+                            $('#menuItems').html('<p>Failed to load menu items.</p>');
+                        }
+                    });
+
+                    loadCart();
+                } else {
+                    $('#menuItems').html('<p>No restaurant selected.</p>');
+                }
+            });
+        </script>
+</body>
+</html>

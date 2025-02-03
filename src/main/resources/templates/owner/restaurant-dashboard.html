@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Restaurant Dashboard - Online Food Delivery System</title>
+    <link rel="shortcut icon" href="/assets/images/favicon.png" type="image/png">
+    <link rel="stylesheet" href="/assets/fonts/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/default.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+<header class="header-area page-header">
+    <div class="container">
+        <div class="header-navigation">
+            <div class="nav-overlay"></div>
+            <div class="primary-menu">
+                <div class="site-branding">
+                    <a href="index.html" class="brand-logo"><img src="/assets/images/logo/logo-main.png" alt="Logo"></a>
+                </div>
+                <div class="nav-inner-menu">
+                    <nav class="main-menu">
+                        <ul>
+                            <li class="menu-item"><a href="index.html">Home</a></li>
+                            <li class="menu-item"><a href="restaurant-dashboard.html">Dashboard</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<section class="dashboard-section pt-110 pb-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title text-center mb-55">
+                    <h2>Restaurant Dashboard</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer Name</th>
+                        <th>Address</th>
+                        <th>Phone</th>
+                        <th>Total Price</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="orderList">
+                    <!-- Orders will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="/assets/vendor/jquery-3.6.0.min.js"></script>
+<script src="/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function() {
+        setInterval(loadOrders, 2000);
+
+        function loadOrders() {
+            $.ajax({
+                url: '/orders',
+                type: 'GET',
+                success: function(response) {
+                    let orderHtml = '';
+                    response.forEach(function(order) {
+                        orderHtml += `
+                        <tr>
+                            <td>${order.id}</td>
+                            <td>${order.customerName}</td>
+                            <td>${order.address}</td>
+                            <td>${order.phone}</td>
+                            <td>${order.totalPrice.toFixed(2)}</td>
+                            <td>${order.status}</td>
+                            <td>
+                                <a href="/restaurant/order-details?orderId=${order.id}" class="btn btn-info">View Order</a>
+                            </td>
+                        </tr>`;
+                    });
+                    $('#orderList').html(orderHtml);
+                },
+                error: function(xhr) {
+                    alert('Failed to load orders.');
+                }
+            });
+        }
+
+        loadOrders();
+    });
+</script>
+</body>
+</html>

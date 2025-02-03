@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant - Orders</title>
+    <link rel="shortcut icon" href="../assets/images/favicon.png" type="image/png">
+    <link rel="stylesheet" href="../assets/fonts/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/vendor/slick/slick.css">
+    <link rel="stylesheet" href="../assets/vendor/nice-select/css/nice-select.css">
+    <link rel="stylesheet" href="../assets/vendor/magnific-popup/dist/magnific-popup.css">
+    <link rel="stylesheet" href="../assets/vendor/jquery-ui/jquery-ui.min.css">
+    <link rel="stylesheet" href="../assets/vendor/animate.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/fonts/fontawesome/css/all.min.css">
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+<header class="header-area">
+    <div class="container">
+        <div class="header-navigation">
+            <div class="nav-overlay"></div>
+            <div class="primary-menu">
+                <div class="site-branding">
+                    <a href="/home" class="brand-logo"><img src="../assets/images/logo/logo-main.png" alt="Logo"></a>
+                </div>
+                <div class="nav-inner-menu">
+                    <div class="foodix-nav-menu">
+                        <div class="mobile-logo mb-30 d-block d-xl-none text-center">
+                            <a href="/home" class="brand-logo"><img src="../assets/images/logo/logo-main.png" alt="Site Logo"></a>
+                        </div>
+                        <nav class="main-menu">
+                            <ul>
+                                <li class="menu-item"><a href="/restaurant/dashboard" >Dashboard</a>
+                                </li>
+                                <li class="menu-item"><a href="/restaurant/orders">Orders</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="nav-right-item">
+                        <div class="nav-button d-none d-xl-block" id="contact-info-btn">
+                            <a class="theme-btn style-one">Account</a>
+                        </div>
+                        <div class="cart-button">
+                            <a href="/restaurant/login" class="far fa-user"></a>
+                        </div>
+                        <div class="navbar-toggler">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+    
+    <main class="orders">
+        <div class="container mt-5">
+            <div class="comparison-toggles">
+                <h5>View real-time orders details</h5>
+            </div>
+            <div class="row">
+                <div class="col-sm-4 col-md-3">
+                    <label class="d-flex align-items-center">
+                        Show
+                        <select id="entries" class="form-control form-control-sm mx-2">
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="-1">All</option>
+                        </select>
+                        entries
+                    </label>
+                </div>
+                <div class="col-sm-12 col-md-6 text-end">
+                    <input type="search" id="search-bar" class="form-control form-control-sm d-inline w-50" placeholder="Search orders...">
+                    <select class="dropdown d-inline w-40" id="status-filter">
+                        <option value="">All Orders</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Accepted">Accepted</option>
+                        <option value="Awaiting Pickup">Awaiting Pickup</option>
+                        <option value="In Delivery">In Delivery</option>
+                        <option value="Delivered">Delivered</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <table id="orders-table" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>ORDER ID</th>
+                        <th>STATUS</th>
+                        <th>TOTAL PRICE</th>
+                        <th>ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Order Details Modal -->
+    <div id="order-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="order-id-title"></h2>
+            <p id="order-address">Address: <span id="address-details"></span></p>
+
+            <h3>Order details</h3>
+            <div id="total-price"></div>
+
+            <h3>Billing Status</h3>
+            <p id="customer-name"></p>
+            <p id="phone"></p>
+        </div>
+    </div>
+
+<!-- Contact Info Modal -->
+<div id="contact-info-modal" class="modal">
+    <div class="modal-content">
+        <h2 style="margin-bottom:20px">Account</h2>
+        <form id="contact-info-form">
+            <label for="cellphone">Cellphone Number:</label>
+            <p id="cellphone" name="cellphone" style="margin-bottom:20px">123-456-7890</p>
+
+            <label for="email">Email Address:</label>
+            <p id="email" style="margin-bottom:20px">admin@admin.com</p>
+
+            <button class="close">Close</button>
+        </form>
+    </div>
+</div>
+
+    <script src="../assets/vendor/jquery-3.6.0.min.js"></script>
+    <script src="../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../assets/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="../assets/vendor/datatables/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const modal = document.getElementById('contact-info-modal');
+            const btn = document.getElementById('contact-info-btn');
+            const span = document.getElementsByClassName('close')[0];
+
+            btn.onclick = function() {
+                modal.style.display = 'block';
+            }
+
+            span.onclick = function() {
+                modal.style.display = 'none';
+            }
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            }
+
+            var table = $('#orders-table').DataTable({
+                "ajax": {
+                    "url": "/orders",
+                    "type": "GET",
+                    "dataSrc": ""
+                },
+                "columns": [
+                    {
+                        "data": "id",
+                        "render": function(data, type, row) {
+                            return `<span class="order-id" data-id="${data}" style="color: #ff2ea6; cursor: pointer;">orderno-${String(data).padStart(5, '0')}</span>`;
+                        }
+                    },
+                    {
+                        "data": "status",
+                        "render": function(data, type, row) {
+                            let color;
+                            switch (data) {
+                                case 'Pending':
+                                    color = '#FFA07A'; // light salmon
+                                    break;
+                                case 'Accepted':
+                                    color = '#87CEFA'; // light sky blue
+                                    break;
+                                case 'In Delivery':
+                                    color = '#DA70D6'; // orchid
+                                    break;
+                                case 'Delivered':
+                                    color = '#90EE90'; // light green
+                                    break;
+                                case 'Rejected':
+                                    color = '#FF69B4'; // hot pink
+                                    break;
+                                default:
+                                    color = '#C0C0C0'; // silver
+                            }
+                            return `<span class="status" style="color: ${color};">● ${data}</span>`;
+                        }
+                    },
+                    {
+                        "data": "totalPrice",
+                        "render": function(data, type, row) {
+                            return `PHP ${parseFloat(data).toFixed(2)}`;
+                        }
+                    },
+                    {
+                        "data": null,
+                        "render": function(data, type, row) {
+                            return `<button class="btn" onclick="window.location.href='/restaurant/order-details?orderId=${row.id}'" style="background-color: #ff2ea6; color: white;">View Details</button>`;
+                        }
+                    }
+                ],
+                "paging": true,
+                "info": true,
+                "lengthChange": false,
+                "dom": "lrtip"
+            });
+
+            $('#search-bar').on('keyup', function() {
+                table.search(this.value).draw();
+            });
+
+            $('#status-filter').on('change', function() {
+                table.column(1).search($(this).val()).draw();
+            });
+
+            $('#entries').on('change', function() {
+                table.page.len(this.value).draw();
+            });
+
+            $('#start-date, #end-date').on('change', function() {
+                var startDate = $('#start-date').val();
+                var endDate = $('#end-date').val();
+                if (startDate && endDate) {
+                    $.fn.dataTable.ext.search.push(
+                        function(settings, data, dataIndex) {
+                            var date = new Date(data[3]);
+                            var start = new Date(startDate);
+                            var end = new Date(endDate);
+                            return (date >= start && date <= end);
+                        }
+                    );
+                    table.draw();
+                    $.fn.dataTable.ext.search.pop();
+                }
+            });
+
+            // Order details modal functionality
+            document.addEventListener('click', function(event) {
+                if (event.target.classList.contains('order-id')) {
+                    const orderIdValue = event.target.getAttribute('data-id');
+                    $.ajax({
+                        url: `/orders/${orderIdValue}`,
+                        type: 'GET',
+                        success: function(order) {
+                            document.getElementById('order-id-title').innerText = `Order ID: ${order.id}`;
+                            document.getElementById('address-details').innerText = order.address;
+                            document.getElementById('total-price').innerText = `Total Price: PHP ${order.totalPrice.toFixed(2)}`;
+                            document.getElementById('customer-name').innerText = `Customer Name: ${order.customerName}`;
+                            document.getElementById('phone').innerText = `Phone: ${order.phone}`;
+                            document.getElementById('order-modal').style.display = 'block';
+                        },
+                        error: function(xhr) {
+                            alert('Failed to load order details.');
+                        }
+                    });
+                }
+            });
+
+            document.querySelectorAll('.close').forEach(closeButton => {
+                closeButton.addEventListener('click', function() {
+                    this.closest('.modal').style.display = 'none';
+                });
+            });
+
+            window.addEventListener('click', function(event) {
+                const contactInfoModal = document.getElementById('contact-info-modal');
+                if (event.target == contactInfoModal) {
+                    contactInfoModal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

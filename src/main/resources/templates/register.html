@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Register - Online Food Delivery System</title>
+  <link rel="shortcut icon" href="assets/images/favicon.png" type="image/png">
+  <link rel="stylesheet" href="assets/fonts/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/vendor/nice-select/css/nice-select.css">
+  <link rel="stylesheet" href="assets/vendor/jquery-ui/jquery-ui.min.css">
+  <link rel="stylesheet" href="assets/css/default.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="home-three">
+<section class="hero-section">
+  <div class="hero-wrapper-three bg_cover" style="background-color: #FF007F;">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="hero-content">
+            <h1>Register</h1>
+            <p>Please fill in the form to create an account.</p>
+            <form id="registerForm">
+              <div class="form-group">
+                <input class="form_control" placeholder="Username" type="text" id="username" name="username" required />
+              </div>
+              <div class="form_group">
+                <input class="form_control" placeholder="Password" type="password" id="password" name="password" required />
+              </div>
+              <div class="form_group">
+                <div id="registerMessage"></div>
+                <button class="theme-btn style-one" type="submit">Register</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#registerForm').on('submit', function(event) {
+      event.preventDefault();
+      const username = $('#username').val();
+      const password = $('#password').val();
+
+      $.ajax({
+        url: '/customer/register',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ username, password }),
+        success: function(response) {
+          $('#registerMessage').html('<p>Registration successful! Redirecting to login...</p>');
+          setTimeout(function() {
+            window.location.href = '/login';
+          }, 2000);
+        },
+        error: function(xhr) {
+          const response = JSON.parse(xhr.responseText);
+          $('#registerMessage').html(`<p>Registration failed: ${response.message}</p>`);
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>

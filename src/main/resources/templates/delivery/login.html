@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <!--====== Required meta tags ======-->
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="Insurance, Health, Agency">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!--====== Title ======-->
+    <title>Online Food Delivery System</title>
+      <link rel="shortcut icon" href="../assets/images/favicon.png" type="image/png">
+      <link rel="stylesheet" href="../assets/fonts/fontawesome/css/all.min.css">
+      <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.min.css">
+      <link rel="stylesheet" href="../assets/vendor/nice-select/css/nice-select.css">
+      <link rel="stylesheet" href="../assets/vendor/jquery-ui/jquery-ui.min.css">
+      <link rel="stylesheet" href="../assets/css/default.css">
+      <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="home-three">
+    <section class="hero-section">
+        <!--=== Hero Wrapper ===-->
+        <div class="hero-wrapper-three bg_cover" style="background-color: #FF007F;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <!--=== Hero Content ===-->
+                        <div class="hero-content">
+                            <h1>Login</h1>
+                            <p>Please enter your username and password.</p>
+                            <form id="loginForm">
+                                <div class="form-group">
+                                    <input class="form_control" placeholder="Username" type="text" id="username" name="username" required />
+                                </div>
+                                <div class="form_group">
+                                    <input class="form_control" placeholder="Password" type="password" id="password" name="password" required />
+                                </div>
+                                <div class="form_group">
+                                    <div id="loginMessage"></div>
+                                    <button class="theme-btn style-one" type="submit">Login</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section><!--====== End Hero Section ======-->
+        <!-- Include jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#loginForm').on('submit', function(event) {
+                event.preventDefault();
+                const username = $('#username').val();
+                const password = $('#password').val();
+
+                $.ajax({
+                    url: '/customer/login',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ username, password }),
+                    success: function(response) {
+                        $('#loginMessage').html('<p>Login successful! Redirecting...</p>');
+                        window.location.href = '/delivery/dashboard';
+                    },
+                    error: function(xhr) {
+                        const response = JSON.parse(xhr.responseText);
+                        $('#loginMessage').html(`<p>Login failed: ${response.message}</p>`);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

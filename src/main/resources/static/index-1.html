@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Food Delivery System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: #77aaff 3px solid;
+        }
+        header a {
+            color: #fff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 16px;
+        }
+        header ul {
+            padding: 0;
+            list-style: none;
+        }
+        header li {
+            float: left;
+            display: inline;
+            padding: 0 20px 0 20px;
+        }
+        header #branding {
+            float: left;
+        }
+        header #branding h1 {
+            margin: 0;
+        }
+        header nav {
+            float: right;
+            margin-top: 10px;
+        }
+        .content {
+            padding: 20px;
+            background: #fff;
+            margin-top: 20px;
+        }
+        .content h2 {
+            color: #333;
+        }
+        .content p {
+            line-height: 1.6;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .form-group button {
+            padding: 10px 20px;
+            background: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h1>Online Food Delivery System</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" onclick="showSection('register')">Register</a></li>
+                    <li><a href="#" onclick="showSection('login')">Login</a></li>
+                    <li><a href="#" onclick="showSection('restaurants')">Browse Restaurants</a></li>
+                    <li><a href="#" onclick="showSection('order')">Place Order</a></li>
+                    <li><a href="#" onclick="showSection('status')">Order Status</a></li>
+                    <li><a href="#" onclick="showSection('restaurant')">Restaurant</a></li>
+                    <li><a href="#" onclick="showSection('delivery')">Delivery</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="container">
+        <div id="register" class="content">
+            <h2>Register</h2>
+            <div class="form-group">
+                <label for="register-username">Username</label>
+                <input type="text" id="register-username">
+            </div>
+            <div class="form-group">
+                <label for="register-password">Password</label>
+                <input type="password" id="register-password">
+            </div>
+            <div class="form-group">
+                <label for="register-email">Email</label>
+                <input type="email" id="register-email">
+            </div>
+            <div class="form-group">
+                <button onclick="registerCustomer()">Register</button>
+            </div>
+        </div>
+        <div id="login" class="content" style="display:none;">
+            <h2>Login</h2>
+            <div class="form-group">
+                <label for="login-username">Username</label>
+                <input type="text" id="login-username">
+            </div>
+            <div class="form-group">
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password">
+            </div>
+            <div class="form-group">
+                <button onclick="loginCustomer()">Login</button>
+            </div>
+        </div>
+        <div id="restaurants" class="content" style="display:none;">
+            <h2>Browse Restaurants</h2>
+            <div id="restaurant-list"></div>
+        </div>
+        <div id="order" class="content" style="display:none;">
+            <h2>Place Order</h2>
+            <div class="form-group">
+                <label for="order-customer-id">Customer ID</label>
+                <input type="text" id="order-customer-id">
+            </div>
+            <div class="form-group">
+                <label for="order-restaurant-id">Restaurant ID</label>
+                <input type="text" id="order-restaurant-id">
+            </div>
+            <div class="form-group">
+                <button onclick="placeOrder()">Place Order</button>
+            </div>
+        </div>
+        <div id="status" class="content" style="display:none;">
+            <h2>Order Status</h2>
+            <div class="form-group">
+                <label for="status-order-id">Order ID</label>
+                <input type="text" id="status-order-id">
+            </div>
+            <div class="form-group">
+                <button onclick="subscribeOrderStatus()">Subscribe to Order Status</button>
+            </div>
+            <div id="order-status"></div>
+        </div>
+        <div id="restaurant" class="content" style="display:none;">
+            <h2>Restaurant</h2>
+            <div class="form-group">
+                <label for="restaurant-order-id">Order ID</label>
+                <input type="text" id="restaurant-order-id">
+            </div>
+            <div class="form-group">
+                <button onclick="acceptOrder()">Accept Order</button>
+                <button onclick="rejectOrder()">Reject Order</button>
+                <button onclick="notifyPreparationCompletion()">Notify Preparation Completion</button>
+            </div>
+        </div>
+        <div id="delivery" class="content" style="display:none;">
+            <h2>Delivery</h2>
+            <div class="form-group">
+                <label for="delivery-person-id">Delivery Person ID</label>
+                <input type="text" id="delivery-person-id">
+            </div>
+            <div class="form-group">
+                <button onclick="viewAssignedOrders()">View Assigned Orders</button>
+            </div>
+            <div id="assigned-orders"></div>
+            <div class="form-group">
+                <label for="delivery-order-id">Order ID</label>
+                <input type="text" id="delivery-order-id">
+            </div>
+            <div class="form-group">
+                <label for="delivery-status">Status</label>
+                <input type="text" id="delivery-status">
+            </div>
+            <div class="form-group">
+                <button onclick="updateDeliveryStatus()">Update Delivery Status</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.content').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        async function registerCustomer() {
+            const username = document.getElementById('register-username').value;
+            const password = document.getElementById('register-password').value;
+            const email = document.getElementById('register-email').value;
+
+            const response = await fetch('/customers/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password, email })
+            });
+            const data = await response.json();
+            console.log(data);
+        }
+
+        async function loginCustomer() {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+
+            const response = await fetch('/customers/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+            const data = await response.json();
+            console.log(data);
+        }
+
+        async function browseRestaurants() {
+            const response = await fetch('/restaurants/all');
+            const data = await response.json();
+            const restaurantList = document.getElementById('restaurant-list');
+            restaurantList.innerHTML = '';
+            data.forEach(restaurant => {
+                const div = document.createElement('div');
+                div.innerHTML = `<h3>${restaurant.name}</h3><p>${restaurant.address}</p>`;
+                restaurantList.appendChild(div);
+            });
+        }
+
+        async function placeOrder() {
+            const customerId = document.getElementById('order-customer-id').value;
+            const restaurantId = document.getElementById('order-restaurant-id').value;
+
+            const response = await fetch('/orders/place', {
+                method: 'POST',
+                body: new URLSearchParams({ customerId, restaurantId })
+            });
+            const data = await response.json();
+            console.log(data);
+        }
+
+        async function subscribeOrderStatus() {
+            const orderId = document.getElementById('status-order-id').value;
+            const eventSource = new EventSource(`/orders/subscribe/${orderId}`);
+            eventSource.onmessage = function(event) {
+                const orderStatus = document.getElementById('order-status');
+                orderStatus.innerHTML = `<p>${event.data}</p>`;
+            };
+        }
+
+        async function acceptOrder() {
+            const orderId = document.getElementById('restaurant-order-id').value;
+
+            const response = await fetch('/restaurants/acceptOrder', {
+                method: 'POST',
+                body: new URLSearchParams({ orderId })
+            });
+            const data = await response.json();
+            console.log(data);
+        }
+
+        async function rejectOrder() {
+            const orderId = document.getElementById('restaurant-order-id').value;
+
+            const response = await fetch('/restaurants/rejectOrder', {
+                method: 'POST',
+                body: new URLSearchParams({ orderId })
+            });
+            const data = await response.json();
+            console.log(data);
+        }
+
+        async function notifyPreparationCompletion() {
+            const orderId = document.getElementById('restaurant-order-id').value;
+
+            const response = await fetch('/restaurants/notifyPreparationCompletion', {
+                method: 'POST',
+                body: new URLSearchParams({ orderId })
+            });
+            const data = await response.json();
+            console.log(data);
+        }
+
+        async function viewAssignedOrders() {
+            const deliveryPersonId = document.getElementById('delivery-person-id').value;
+
+            const response = await fetch(`/deliveries/assignedOrders?deliveryPersonId=${deliveryPersonId}`);
+            const data = await response.json();
+            const assignedOrders = document.getElementById('assigned-orders');
+            assignedOrders.innerHTML = '';
+            data.forEach(order => {
+                const div = document.createElement('div');
+                div.innerHTML = `<p>Order ID: ${order.orderId}, Status: ${order.status}</p>`;
+                assignedOrders.appendChild(div);
+            });
+        }
+
+        async function updateDeliveryStatus() {
+            const deliveryId = document.getElementById('delivery-order-id').value;
+            const status = document.getElementById('delivery-status').value;
+
+            const response = await fetch('/deliveries/updateStatus', {
+                method: 'POST',
+                body: new URLSearchParams({ deliveryId, status })
+            });
+            const data = await response.json();
+            console.log(data);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            browseRestaurants();
+        });
+    </script>
+</body>
+</html>
